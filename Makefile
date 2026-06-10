@@ -38,6 +38,9 @@ dist:
 	cp README.md LICENSE config-example.toml dist/linux-amd64/
 	cp README.md LICENSE config-example.toml dist/linux-arm64/
 	cp README.md LICENSE config-example.toml dist/windows-amd64/
+	cp -R docs dist/linux-amd64/
+	cp -R docs dist/linux-arm64/
+	cp -R docs dist/windows-amd64/
 	tar -czf dist/$(BINARY)-$(RELEASE_VERSION)-linux-amd64.tar.gz -C dist/linux-amd64 .
 	tar -czf dist/$(BINARY)-$(RELEASE_VERSION)-linux-arm64.tar.gz -C dist/linux-arm64 .
 	if command -v zip >/dev/null 2>&1; then cd dist/windows-amd64 && zip -q -r ../$(BINARY)-$(RELEASE_VERSION)-windows-amd64.zip .; else bsdtar -a -cf dist/$(BINARY)-$(RELEASE_VERSION)-windows-amd64.zip -C dist/windows-amd64 .; fi
