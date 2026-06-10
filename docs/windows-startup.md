@@ -1,6 +1,6 @@
 # Windows Startup
 
-The Windows binary currently provides configuration and version commands but exits from `run` with an unsupported-media error. These startup methods are ready for a future Windows media provider.
+Windows media detection is not supported in v0.1.0. Do not enable automatic startup for this release. These instructions can be used after Windows media support is added.
 
 ## Startup Folder
 
@@ -31,4 +31,4 @@ Remove the shortcut to disable startup.
 8. Do not enable `Run with highest privileges`.
 9. Save the task.
 
-Run the task manually once to inspect its result. Normal usage must not require administrator privileges.
+Run the task manually once to inspect its result. Administrator privileges are not required.
