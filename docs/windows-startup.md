@@ -1,7 +1,5 @@
 # Windows Startup
 
-Windows media detection is not supported in v0.1.0. Do not enable automatic startup for this release. These instructions can be used after Windows media support is added.
-
 ## Startup Folder
 
 1. Extract `disgord-lyrics.exe` to a stable directory such as `%LOCALAPPDATA%\DisGOrd Lyrics`.

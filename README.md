@@ -12,9 +12,13 @@ It reads the active media player, finds synchronized lyrics through LRCLIB, and 
 
 Discord does not provide an official way for this app to change a user's custom status. DisGOrd Lyrics uses an undocumented Discord endpoint and requires your Discord user token.
 
-Using a user token for automation may violate Discord's Terms of Service and may put your account at risk. Discord can change or block this method at any time.
+Discord can change or block this method at any time.
 
-Your token gives access to your account. Never share it, post it, include it in screenshots, or commit a filled configuration file to Git.
+Your Discord token gives access to your account. Do not share it. Using a user token for automation may violate Discord's Terms of Service and may put your account at risk.
+
+The original project includes a video tutorial showing the Discord token setup process. The relevant part starts at 2:30: https://www.youtube.com/watch?v=5RDWmaV7O2U&t=150s
+
+Only use a credential from your own account. Never share it, post it, include it in screenshots, or commit a filled configuration file to Git.
 
 ### Supported platforms
 
@@ -22,9 +26,7 @@ Your token gives access to your account. Never share it, post it, include it in 
 |----------|--------|
 | Linux amd64 | Supported through MPRIS |
 | Linux arm64 | Supported through MPRIS |
-| Windows amd64 | Binary available, but media detection is not supported in v0.1.0 |
-
-The Windows binary can create and display the configuration and show version information. The main lyric-status feature does not currently work on Windows.
+| Windows amd64 | Supported through Windows media controls |
 
 ## Downloads
 
@@ -43,8 +45,6 @@ sha256sum -c checksums.txt --ignore-missing
 ```
 
 ## Windows installation
-
-Windows media detection is not supported in v0.1.0, so `run` exits with an unsupported-media message. These steps let you inspect and prepare the app, but it cannot update lyrics from Windows media sessions yet.
 
 1. Download the Windows `.zip` from [GitHub Releases](https://github.com/kristyancarvalho/disGOrd-lyrics/releases).
 2. Right-click the file and select **Extract All**.
@@ -68,13 +68,14 @@ C:\Users\YOUR_USER\AppData\Local\DisGOrd Lyrics
 ```
 
 7. Open that file in Notepad and add your Discord token.
-8. The runtime command is:
+8. Start Spotify or another player that appears in Windows media controls and play a song.
+9. Start DisGOrd Lyrics:
 
 ```powershell
 .\disgord-lyrics.exe run
 ```
 
-This command will report that Windows media detection is unsupported in this release.
+Keep the PowerShell window open. DisGOrd Lyrics reads the active Windows media session and updates the lyric as playback moves.
 
 ## Linux installation
 
@@ -196,7 +197,7 @@ systemctl --user disable --now disgord-lyrics.service
 
 ### Windows
 
-The [Windows startup guide](docs/windows-startup.md) explains the Startup folder and Task Scheduler methods. Do not enable automatic startup for v0.1.0 because Windows media detection is not supported.
+The [Windows startup guide](docs/windows-startup.md) explains the Startup folder and Task Scheduler methods.
 
 ## Updating
 
@@ -272,9 +273,9 @@ LRCLIB may not have synchronized lyrics for the exact title and artist reported 
 
 The token may be invalid, Discord may be rate limiting requests, or Discord may have changed its undocumented endpoint.
 
-### Windows reports unsupported media detection
+### No media is detected on Windows
 
-This is expected in v0.1.0. The Windows binary does not yet read active Windows media sessions.
+Use Windows 10 version 1809 or newer, or Windows 11. Start playback before running DisGOrd Lyrics and confirm the player appears in the Windows media controls. Spotify and other compatible players should expose the title, artist, playback position, and playback state.
 
 ## Uninstalling
 
@@ -310,5 +311,11 @@ go test ./...
 make build
 make dist
 ```
+
+## Credits
+
+DisGOrd Lyrics was inspired by [Discord-Lyrics-Selfbot-Status](https://github.com/5dwn/Discord-Lyrics-Selfbot-Status), a Python project that demonstrated the idea of reading Windows media controls and updating Discord custom status with synchronized lyrics.
+
+This project reimplements the idea in Go, adds Linux support, release binaries, configuration files, and packaging improvements.
 
 DisGOrd Lyrics is released under the [MIT License](LICENSE).

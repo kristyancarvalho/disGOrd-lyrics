@@ -96,30 +96,38 @@ func TestRuntimePollUpdatesActiveLyricOnce(t *testing.T) {
 	}
 }
 
-func TestRuntimePollClearsPausedStatus(t *testing.T) {
-	mediaProvider := &fakeMedia{track: media.Track{Status: media.StatusPaused}}
-	discordClient := &fakeDiscord{}
-	manager := status.NewManager(discordClient)
+func TestRuntimePollClearsInactiveStatus(t *testing.T) {
+	for _, playbackStatus := range []media.PlaybackStatus{
+		media.StatusPaused,
+		media.StatusStopped,
+		media.StatusUnknown,
+	} {
+		t.Run(string(playbackStatus), func(t *testing.T) {
+			mediaProvider := &fakeMedia{track: media.Track{Status: playbackStatus}}
+			discordClient := &fakeDiscord{}
+			manager := status.NewManager(discordClient)
 
-	runtime := &Runtime{
-		media:          mediaProvider,
-		lyrics:         &fakeLyrics{},
-		status:         manager,
-		output:         &bytes.Buffer{},
-		logger:         newLogger(&bytes.Buffer{}, "debug"),
-		clearOnPause:   true,
-		requestTimeout: time.Second,
-	}
+			runtime := &Runtime{
+				media:          mediaProvider,
+				lyrics:         &fakeLyrics{},
+				status:         manager,
+				output:         &bytes.Buffer{},
+				logger:         newLogger(&bytes.Buffer{}, "debug"),
+				clearOnPause:   true,
+				requestTimeout: time.Second,
+			}
 
-	if err := runtime.poll(context.Background(), time.Now()); err != nil {
-		t.Fatal(err)
-	}
-	if err := runtime.poll(context.Background(), time.Now()); err != nil {
-		t.Fatal(err)
-	}
+			if err := runtime.poll(context.Background(), time.Now()); err != nil {
+				t.Fatal(err)
+			}
+			if err := runtime.poll(context.Background(), time.Now()); err != nil {
+				t.Fatal(err)
+			}
 
-	if discordClient.clears != 1 {
-		t.Fatalf("expected one clear request, got %d", discordClient.clears)
+			if discordClient.clears != 1 {
+				t.Fatalf("expected one clear request, got %d", discordClient.clears)
+			}
+		})
 	}
 }
 
