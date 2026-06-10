@@ -1,6 +1,6 @@
 pkgbase = disgord-lyrics-bin
 	pkgdesc = Update Discord custom status with synchronized lyrics from the currently playing song
-	pkgver = 0.1.0
+	pkgver = 0.2.0
 	pkgrel = 1
 	url = https://github.com/kristyancarvalho/disGOrd-lyrics
 	arch = x86_64
@@ -9,7 +9,7 @@ pkgbase = disgord-lyrics-bin
 	conflicts = disgord-lyrics
 	options = !debug
 	options = !strip
-	source = disgord-lyrics-bin-0.1.0.tar.gz::https://github.com/kristyancarvalho/disGOrd-lyrics/releases/download/v0.1.0/disgord-lyrics-v0.1.0-linux-amd64.tar.gz
-	sha256sums = 4c72145cb637585364004093ad411657f3f05062047f859b70cbf40c5bdb7c79
+	source = disgord-lyrics-bin-0.2.0.tar.gz::https://github.com/kristyancarvalho/disGOrd-lyrics/releases/download/v0.2.0/disgord-lyrics-v0.2.0-linux-amd64.tar.gz
+	sha256sums = d06f7836087b66f7ee1b65f005871467d55b876f5720cef04962936c3cff3b9a
 
 pkgname = disgord-lyrics-bin

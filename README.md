@@ -105,9 +105,19 @@ If the command is not found, see [Command not found](#command-not-found).
 
 ## Arch Linux installation
 
-`disgord-lyrics-bin` is not published in the AUR. Install the Linux amd64 archive from [GitHub Releases](https://github.com/kristyancarvalho/disGOrd-lyrics/releases) using the Linux instructions above.
+Install `disgord-lyrics-bin` with an AUR helper:
 
-Do not run `paru -S disgord-lyrics-bin` or `yay -S disgord-lyrics-bin`; no public AUR package currently exists.
+```sh
+paru -S disgord-lyrics-bin
+```
+
+or:
+
+```sh
+yay -S disgord-lyrics-bin
+```
+
+After installation, continue with [First-time setup](#first-time-setup).
 
 ## First-time setup
 
