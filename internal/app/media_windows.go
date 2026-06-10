@@ -3,11 +3,10 @@
 package app
 
 import (
-	"fmt"
-
 	"github.com/kristyancarvalho/disGOrd-lyrics/internal/media"
+	windowsmedia "github.com/kristyancarvalho/disGOrd-lyrics/internal/media/windows"
 )
 
 func newMediaProvider() (media.Provider, error) {
-	return nil, fmt.Errorf("%w: Windows system media sessions are not available in this release", media.ErrUnsupported)
+	return windowsmedia.New()
 }
