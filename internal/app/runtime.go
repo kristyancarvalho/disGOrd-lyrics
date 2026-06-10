@@ -64,7 +64,9 @@ func (runtime *Runtime) Run(ctx context.Context) error {
 }
 
 func (runtime *Runtime) poll(ctx context.Context, now time.Time) error {
-	track, err := runtime.media.Current(ctx)
+	mediaCtx, cancel := context.WithTimeout(ctx, runtime.requestTimeout)
+	track, err := runtime.media.Current(mediaCtx)
+	cancel()
 	if err != nil {
 		if errors.Is(err, media.ErrUnsupported) {
 			return err
