@@ -8,7 +8,7 @@ clear_on_pause = true
 clear_on_exit = true
 
 [lyrics]
-provider = "syncedlyrics"
+provider = "lrclib"
 offset_ms = 500
 
 [polling]

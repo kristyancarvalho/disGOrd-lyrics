@@ -1,34 +1,15 @@
-# binaries
 bin/
 dist/
 *.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
-# build artifacts
-*.o
-*.a
 *.test
 *.out
 coverage.txt
 coverage.html
-cpu.prof
-mem.prof
 *.prof
-
-specs
-packaging/aur/pkg/
-packaging/aur/src/
-packaging/aur/*.pkg.tar.zst
-packaging/aur/*.tar.gz
-
-# go module cache and vendor
-vendor/
-go.sum.bak
-
-# editor and IDE
+.env
+.env.*
+config.toml
+!config-example.toml
 .vscode/
 .idea/
 *.swp
@@ -36,18 +17,3 @@ go.sum.bak
 *~
 .DS_Store
 Thumbs.db
-*.iml
-
-# environment and secrets
-.env
-.env.*
-*.env
-config.toml
-!config-example.toml
-
-# test artifacts
-testdata/*.tmp
-__debug_bin
-
-# goreleaser
-dist/

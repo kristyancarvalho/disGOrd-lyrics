@@ -27,6 +27,23 @@ func TestRunVersion(t *testing.T) {
 	}
 }
 
+func TestRunHelpListsCommands(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	code := Run([]string{"help"}, &stdout, &stderr)
+
+	if code != 0 {
+		t.Fatalf("expected exit code 0, got %d", code)
+	}
+
+	for _, command := range []string{"run", "init", "config-path", "version", "help"} {
+		if !strings.Contains(stdout.String(), command) {
+			t.Fatalf("expected help output to contain %q", command)
+		}
+	}
+}
+
 func TestRunUnknownCommand(t *testing.T) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
