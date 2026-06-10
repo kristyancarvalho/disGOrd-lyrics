@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -26,7 +27,7 @@ func TestTemplateMatchesExample(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if string(content) != Template {
+	if strings.ReplaceAll(string(content), "\r\n", "\n") != Template {
 		t.Fatal("config template and config-example.toml differ")
 	}
 }
@@ -93,12 +94,14 @@ func TestInitDoesNotOverwriteWithoutForce(t *testing.T) {
 		t.Fatal("expected forced init to restore template")
 	}
 
-	info, err := os.Stat(path)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if info.Mode().Perm() != 0o600 {
-		t.Fatalf("expected config permissions 0600, got %o", info.Mode().Perm())
+	if runtime.GOOS != "windows" {
+		info, err := os.Stat(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if info.Mode().Perm() != 0o600 {
+			t.Fatalf("expected config permissions 0600, got %o", info.Mode().Perm())
+		}
 	}
 }
 
