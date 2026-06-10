@@ -1,5 +1,5 @@
 pkgname=disgord-lyrics-bin
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 pkgdesc="Update Discord custom status with synchronized lyrics from the currently playing song"
 arch=('x86_64')
@@ -9,7 +9,7 @@ provides=('disgord-lyrics')
 conflicts=('disgord-lyrics')
 options=('!debug' '!strip')
 source=("${pkgname}-${pkgver}.tar.gz::${url}/releases/download/v${pkgver}/disgord-lyrics-v${pkgver}-linux-amd64.tar.gz")
-sha256sums=('4c72145cb637585364004093ad411657f3f05062047f859b70cbf40c5bdb7c79')
+sha256sums=('d06f7836087b66f7ee1b65f005871467d55b876f5720cef04962936c3cff3b9a')
 
 package() {
   install -Dm755 "${srcdir}/disgord-lyrics" "${pkgdir}/usr/bin/disgord-lyrics"
