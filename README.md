@@ -12,6 +12,8 @@ DisGOrd Lyrics shows the current synchronized lyric line as your Discord custom 
 
 It reads the active media player, finds synchronized lyrics through LRCLIB, and updates the status only when the lyric changes. It can clear the status when playback pauses, stops, or the app exits.
 
+<img src="./.github/assets/demo.gif" alt="Description" width="200"/>
+
 ## Before you start
 
 ### Discord account warning
