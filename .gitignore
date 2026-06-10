@@ -17,3 +17,7 @@ config.toml
 *~
 .DS_Store
 Thumbs.db
+packaging/aur/disgord-lyrics-bin/pkg/
+packaging/aur/disgord-lyrics-bin/src/
+packaging/aur/disgord-lyrics-bin/*.pkg.tar.zst
+packaging/aur/disgord-lyrics-bin/*.tar.gz
