@@ -1,5 +1,11 @@
 # DisGOrd Lyrics
 
+[![Release workflow](https://github.com/kristyancarvalho/disGOrd-lyrics/actions/workflows/release.yml/badge.svg)](https://github.com/kristyancarvalho/disGOrd-lyrics/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/github/license/kristyancarvalho/disGOrd-lyrics)](LICENSE)
+[![Go version](https://img.shields.io/github/go-mod/go-version/kristyancarvalho/disGOrd-lyrics)](go.mod)
+[![Latest release](https://img.shields.io/github/v/release/kristyancarvalho/disGOrd-lyrics)](https://github.com/kristyancarvalho/disGOrd-lyrics/releases)
+[![Active milestones](https://img.shields.io/badge/milestones-active-2563eb)](https://github.com/kristyancarvalho/disGOrd-lyrics/milestones)
+
 ## What it does
 
 DisGOrd Lyrics shows the current synchronized lyric line as your Discord custom status while music is playing.
