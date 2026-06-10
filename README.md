@@ -1,76 +1,116 @@
 # DisGOrd Lyrics
 
-[![Release workflow](https://github.com/kristyancarvalho/disGOrd-lyrics/actions/workflows/release.yml/badge.svg)](https://github.com/kristyancarvalho/disGOrd-lyrics/actions/workflows/release.yml)
-[![License: MIT](https://img.shields.io/github/license/kristyancarvalho/disGOrd-lyrics)](LICENSE)
-[![Go version](https://img.shields.io/github/go-mod/go-version/kristyancarvalho/disGOrd-lyrics)](go.mod)
-[![Latest release](https://img.shields.io/github/v/release/kristyancarvalho/disGOrd-lyrics)](https://github.com/kristyancarvalho/disGOrd-lyrics/releases)
+## What it does
 
-DisGOrd Lyrics reads the active desktop media session, finds synchronized lyrics, and updates the user's Discord custom status with the current lyric line.
+DisGOrd Lyrics shows the current synchronized lyric line as your Discord custom status while music is playing.
 
-The application is implemented in Go and has no Python runtime dependency. Linux media detection uses MPRIS over D-Bus. Windows binaries build and provide the CLI and configuration commands, but Windows media detection is not available in this release.
+It reads the active media player, finds synchronized lyrics through LRCLIB, and updates the status only when the lyric changes. It can clear the status when playback pauses, stops, or the app exits.
 
-## Supported Platforms
+## Before you start
 
-| Platform | Architecture | Media Detection |
-|----------|--------------|-----------------|
-| Linux | amd64 | MPRIS |
-| Linux | arm64 | MPRIS |
-| Windows | amd64 | Not currently supported |
+### Discord account warning
 
-## Discord Account Risk
+Discord does not provide an official way for this app to change a user's custom status. DisGOrd Lyrics uses an undocumented Discord endpoint and requires your Discord user token.
 
-Discord does not provide an official API for applications to update a user's custom status. DisGOrd Lyrics uses the undocumented user settings endpoint with a user token.
+Using a user token for automation may violate Discord's Terms of Service and may put your account at risk. Discord can change or block this method at any time.
 
-Using a user token for automation may violate Discord's Terms of Service, can stop working without notice, and may put the Discord account at risk. Use this application only after understanding and accepting that risk. The token is isolated in the configuration and Discord packages, but it is still a sensitive account credential.
+Your token gives access to your account. Never share it, post it, include it in screenshots, or commit a filled configuration file to Git.
 
-Never commit, log, publish, screenshot, or share the token or a populated configuration file.
+### Supported platforms
 
-## Installation
+| Platform | Status |
+|----------|--------|
+| Linux amd64 | Supported through MPRIS |
+| Linux arm64 | Supported through MPRIS |
+| Windows amd64 | Binary available, but media detection is not supported in v0.1.0 |
 
-Download the archive for the target platform from [GitHub Releases](https://github.com/kristyancarvalho/disGOrd-lyrics/releases):
+The Windows binary can create and display the configuration and show version information. The main lyric-status feature does not currently work on Windows.
 
-```text
-disgord-lyrics-vX.Y.Z-linux-amd64.tar.gz
-disgord-lyrics-vX.Y.Z-linux-arm64.tar.gz
-disgord-lyrics-vX.Y.Z-windows-amd64.zip
-checksums.txt
-```
+## Downloads
 
-Verify the archive before extracting:
+Download the latest files from [GitHub Releases](https://github.com/kristyancarvalho/disGOrd-lyrics/releases).
+
+Choose the file for your computer:
+
+- Linux on most PCs: `disgord-lyrics-vX.Y.Z-linux-amd64.tar.gz`
+- Linux on ARM64 devices: `disgord-lyrics-vX.Y.Z-linux-arm64.tar.gz`
+- Windows: `disgord-lyrics-vX.Y.Z-windows-amd64.zip`
+
+The release also includes `checksums.txt`. On Linux, verify the downloads before installing:
 
 ```sh
-sha256sum -c checksums.txt
+sha256sum -c checksums.txt --ignore-missing
 ```
 
-On Linux, install the binary in the user path:
+## Windows installation
+
+Windows media detection is not supported in v0.1.0, so `run` exits with an unsupported-media message. These steps let you inspect and prepare the app, but it cannot update lyrics from Windows media sessions yet.
+
+1. Download the Windows `.zip` from [GitHub Releases](https://github.com/kristyancarvalho/disGOrd-lyrics/releases).
+2. Right-click the file and select **Extract All**.
+3. Move the extracted folder somewhere permanent, such as:
+
+```text
+C:\Users\YOUR_USER\AppData\Local\DisGOrd Lyrics
+```
+
+4. Open PowerShell in that folder.
+5. Create the configuration:
+
+```powershell
+.\disgord-lyrics.exe init
+```
+
+6. Print the configuration location:
+
+```powershell
+.\disgord-lyrics.exe config-path
+```
+
+7. Open that file in Notepad and add your Discord token.
+8. The runtime command is:
+
+```powershell
+.\disgord-lyrics.exe run
+```
+
+This command will report that Windows media detection is unsupported in this release.
+
+## Linux installation
+
+1. Download the correct Linux `.tar.gz` from [GitHub Releases](https://github.com/kristyancarvalho/disGOrd-lyrics/releases).
+2. Open a terminal in the download folder.
+3. Extract the archive:
+
+```sh
+tar -xzf disgord-lyrics-vX.Y.Z-linux-amd64.tar.gz
+```
+
+For an ARM64 download, replace `linux-amd64` with `linux-arm64`.
+
+4. Install the binary for your user:
 
 ```sh
 install -Dm755 disgord-lyrics ~/.local/bin/disgord-lyrics
 ```
 
-On Windows, extract `disgord-lyrics.exe` to a stable user-owned directory.
-
-## Arch Linux
-
-The `disgord-lyrics-bin` AUR packaging files are maintained under `packaging/aur/disgord-lyrics-bin`.
-
-The package is not published to the AUR because this GitHub repository is currently private. AUR builds require the release archive to be publicly downloadable without GitHub credentials.
-
-After downloading the v0.1.0 Linux amd64 archive with an authenticated GitHub account, place it beside `PKGBUILD` as `disgord-lyrics-bin-0.1.0.tar.gz`, then build locally:
+5. Confirm it works:
 
 ```sh
-git clone https://github.com/kristyancarvalho/disGOrd-lyrics.git
-cd disGOrd-lyrics/packaging/aur/disgord-lyrics-bin
-gh release download v0.1.0 --repo kristyancarvalho/disGOrd-lyrics --pattern 'disgord-lyrics-v0.1.0-linux-amd64.tar.gz'
-mv disgord-lyrics-v0.1.0-linux-amd64.tar.gz disgord-lyrics-bin-0.1.0.tar.gz
-makepkg -si
+disgord-lyrics version
 ```
 
-See [docs/aur.md](docs/aur.md) for validation and publishing steps after the repository becomes public.
+If the command is not found, see [Command not found](#command-not-found).
 
-## Configuration
+## Arch Linux installation
 
-Create the configuration:
+`disgord-lyrics-bin` is not published in the AUR. Install the Linux amd64 archive from [GitHub Releases](https://github.com/kristyancarvalho/disGOrd-lyrics/releases) using the Linux instructions above.
+
+Do not run `paru -S disgord-lyrics-bin` or `yay -S disgord-lyrics-bin`; no public AUR package currently exists.
+
+## First-time setup
+
+Create the configuration file:
 
 ```sh
 disgord-lyrics init
@@ -88,7 +128,7 @@ Default locations:
 - Windows: `%ProgramData%\DisGOrd Lyrics\config.toml`
 - Windows fallback: `%APPDATA%\DisGOrd Lyrics\config.toml`
 
-Edit the generated file and set `discord.token`. The default configuration is:
+Open the file in a text editor and place your Discord token between the quotes:
 
 ```toml
 [discord]
@@ -111,103 +151,164 @@ interval_ms = 300
 level = "info"
 ```
 
-`init` does not overwrite an existing file. Use `disgord-lyrics init --force` only when replacing it is intentional.
+Save the file. Do not share it after adding the token.
 
-## Usage
+The `init` command will not replace an existing configuration. `disgord-lyrics init --force` replaces it with a blank template and removes the saved token.
 
-Start the runtime:
+## Running the app
+
+Start DisGOrd Lyrics:
 
 ```sh
 disgord-lyrics run
 ```
 
-Other commands:
+Keep the terminal open while the app runs. To stop it, press `Ctrl+C`. The app clears the Discord status on exit when `clear_on_exit` is enabled.
+
+Available commands:
 
 ```sh
-disgord-lyrics init [--force]
+disgord-lyrics run
+disgord-lyrics init
+disgord-lyrics init --force
 disgord-lyrics config-path
 disgord-lyrics version
 disgord-lyrics help
 ```
 
-The runtime clears the Discord custom status at startup, when media is paused, stopped, unavailable, or invalid, and on exit according to the configuration. Duplicate lyric lines do not produce duplicate Discord requests.
+## Start automatically with the system
 
-## Startup
+### Linux
 
-- [Linux user systemd service](docs/linux-startup.md)
-- [Windows Startup folder and Task Scheduler](docs/windows-startup.md)
+Use the [Linux systemd setup guide](docs/linux-startup.md). It creates a service for your user and does not require root access.
 
-The Windows startup instructions are provided for future media support and for CLI availability. The current Windows runtime exits with a clear unsupported-media error.
+Stop the background service:
+
+```sh
+systemctl --user stop disgord-lyrics.service
+```
+
+Disable automatic startup:
+
+```sh
+systemctl --user disable --now disgord-lyrics.service
+```
+
+### Windows
+
+The [Windows startup guide](docs/windows-startup.md) explains the Startup folder and Task Scheduler methods. Do not enable automatic startup for v0.1.0 because Windows media detection is not supported.
+
+## Updating
+
+1. Stop the running app with `Ctrl+C`, or stop the Linux service:
+
+```sh
+systemctl --user stop disgord-lyrics.service
+```
+
+2. Download the new archive from [GitHub Releases](https://github.com/kristyancarvalho/disGOrd-lyrics/releases).
+3. Extract it.
+4. Replace the old binary with the new one.
+
+On Linux:
+
+```sh
+install -Dm755 disgord-lyrics ~/.local/bin/disgord-lyrics
+```
+
+5. Start the app or service again:
+
+```sh
+systemctl --user start disgord-lyrics.service
+```
+
+Your existing configuration is kept during an update.
 
 ## Troubleshooting
 
-### Config file not found
+### Command not found
 
-Run `disgord-lyrics init`, then use `disgord-lyrics config-path` to locate the generated file.
+Run the binary by its full path:
+
+```sh
+~/.local/bin/disgord-lyrics version
+```
+
+If that works, add `~/.local/bin` to your shell's `PATH`, then open a new terminal.
+
+### Configuration file not found
+
+Create it:
+
+```sh
+disgord-lyrics init
+```
+
+Then find it:
+
+```sh
+disgord-lyrics config-path
+```
 
 ### Discord token is required
 
-Set a non-empty `discord.token` value. The application never prints the configured value.
+Open the configuration file and set a non-empty `discord.token`. Keep the quotes around the value.
 
 ### No media is detected on Linux
 
-Confirm the player exposes an MPRIS service:
+The player must support MPRIS and run in the same desktop session as DisGOrd Lyrics. Check for a player:
 
 ```sh
 busctl --user list | grep org.mpris.MediaPlayer2
 ```
 
-The application must run inside the same graphical user session and D-Bus session as the media player.
+Try starting music before starting DisGOrd Lyrics.
 
-### No synchronized lyrics are found
+### Lyrics are missing
 
-LRCLIB may not have a synchronized record for the exact title and artist reported by the player. Instrumental and unsynchronized records are ignored.
+LRCLIB may not have synchronized lyrics for the exact title and artist reported by the media player. The app continues running and tries again when the song changes.
 
 ### Discord returns an HTTP error
 
-The token may be invalid, Discord may have changed the undocumented endpoint, or the account may be rate limited. The response body and token are not logged.
+The token may be invalid, Discord may be rate limiting requests, or Discord may have changed its undocumented endpoint.
 
 ### Windows reports unsupported media detection
 
-The Windows binary is intentionally buildable, but the current provider returns an explicit unsupported error. Windows Runtime global media session integration remains a known limitation.
+This is expected in v0.1.0. The Windows binary does not yet read active Windows media sessions.
 
-## Development
+## Uninstalling
 
-Requirements:
+### Linux
 
-- Go 1.26 or newer
-- GNU Make
-- Git
-- `tar`, `sha256sum`, and either `zip` or `bsdtar` for release packaging
+Stop and remove the user service if it was enabled:
+
+```sh
+systemctl --user disable --now disgord-lyrics.service
+rm -f ~/.config/systemd/user/disgord-lyrics.service
+systemctl --user daemon-reload
+```
+
+Remove the binary and configuration:
+
+```sh
+rm -f ~/.local/bin/disgord-lyrics
+rm -rf ~/.config/disgord-lyrics
+```
+
+Removing the configuration permanently deletes the saved Discord token and settings.
+
+### Windows
+
+1. Remove any Startup folder shortcut or Task Scheduler task.
+2. Delete the folder containing `disgord-lyrics.exe`.
+3. Delete `%ProgramData%\DisGOrd Lyrics` or the fallback `%APPDATA%\DisGOrd Lyrics` folder.
+
+## For developers
 
 ```sh
 go test ./...
 make build
-make version
 make dist
 ```
-
-Package layout:
-
-| Path | Purpose |
-|------|---------|
-| `cmd/disgord-lyrics` | Minimal CLI entrypoint |
-| `internal/app` | Commands, runtime wiring, polling, and shutdown |
-| `internal/config` | TOML defaults, loading, validation, and initialization |
-| `internal/discord` | Isolated custom status HTTP client |
-| `internal/lyrics` | LRCLIB client, cache, LRC parsing, and active-line selection |
-| `internal/media` | Platform-neutral media types and provider interface |
-| `internal/media/linux` | Linux MPRIS provider |
-| `internal/media/windows` | Explicit unsupported Windows provider |
-| `internal/status` | Lyric cleaning, formatting, and duplicate suppression |
-| `internal/version` | Build-time metadata |
-
-## Releases
-
-The `release` GitHub Actions workflow runs for `v*` tags, tests the project, creates Linux and Windows archives, generates `checksums.txt`, and publishes a GitHub Release with generated notes.
-
-See [docs/release.md](docs/release.md) for the release checklist.
-
-## License
 
 DisGOrd Lyrics is released under the [MIT License](LICENSE).
