@@ -50,6 +50,24 @@ install -Dm755 disgord-lyrics ~/.local/bin/disgord-lyrics
 
 On Windows, extract `disgord-lyrics.exe` to a stable user-owned directory.
 
+## Arch Linux
+
+The `disgord-lyrics-bin` AUR packaging files are maintained under `packaging/aur/disgord-lyrics-bin`.
+
+The package is not published to the AUR because this GitHub repository is currently private. AUR builds require the release archive to be publicly downloadable without GitHub credentials.
+
+After downloading the v0.1.0 Linux amd64 archive with an authenticated GitHub account, place it beside `PKGBUILD` as `disgord-lyrics-bin-0.1.0.tar.gz`, then build locally:
+
+```sh
+git clone https://github.com/kristyancarvalho/disGOrd-lyrics.git
+cd disGOrd-lyrics/packaging/aur/disgord-lyrics-bin
+gh release download v0.1.0 --repo kristyancarvalho/disGOrd-lyrics --pattern 'disgord-lyrics-v0.1.0-linux-amd64.tar.gz'
+mv disgord-lyrics-v0.1.0-linux-amd64.tar.gz disgord-lyrics-bin-0.1.0.tar.gz
+makepkg -si
+```
+
+See [docs/aur.md](docs/aur.md) for validation and publishing steps after the repository becomes public.
+
 ## Configuration
 
 Create the configuration:

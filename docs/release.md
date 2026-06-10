@@ -86,3 +86,18 @@ gh release download vX.Y.Z --dir /tmp/disgord-lyrics-release-check
 cd /tmp/disgord-lyrics-release-check
 sha256sum -c checksums.txt
 ```
+
+13. Update `packaging/aur/disgord-lyrics-bin/PKGBUILD` with the release version and published Linux amd64 checksum.
+14. Regenerate and validate AUR metadata:
+
+```sh
+cd packaging/aur/disgord-lyrics-bin
+makepkg --printsrcinfo > .SRCINFO
+makepkg -f
+cd ../../..
+```
+
+15. Confirm the release archive is publicly downloadable without GitHub authentication.
+16. Publish `PKGBUILD` and `.SRCINFO` to `ssh://aur@aur.archlinux.org/disgord-lyrics-bin.git`.
+
+Private GitHub release assets cannot be used as AUR sources. See [aur.md](aur.md) for the validation and manual publishing commands.
