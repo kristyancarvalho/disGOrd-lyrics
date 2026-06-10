@@ -36,4 +36,20 @@ jobs:
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/*.tar.gz dist/*.zip dist/checksums.txt --title "$GITHUB_REF_NAME" --generate-notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(
+            "$GITHUB_REF_NAME"
+            dist/*.tar.gz
+            dist/*.zip
+            dist/checksums.txt
+            --title "DisGOrd Lyrics ${GITHUB_REF_NAME}"
+            --verify-tag
+            --generate-notes
+          )
+          notes_file="docs/release-notes/${GITHUB_REF_NAME}.md"
+          if [ -f "$notes_file" ]; then
+            args+=(--notes "$(cat "$notes_file")")
+          fi
+          gh release create "${args[@]}"
